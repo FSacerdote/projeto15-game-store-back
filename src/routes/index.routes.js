@@ -1,7 +1,10 @@
 import { Router } from "express"
+import gamesRouter from "./games.routes.js"
 import authRouter from "./users.routes.js"
 
+
 const router = Router()
+router.use(gamesRouter)
 
 router.use(userRouter)
 
