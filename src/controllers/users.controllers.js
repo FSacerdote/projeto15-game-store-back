@@ -6,8 +6,8 @@ export async function signup(req, res) {
     const { name, email, password } = req.body;
     
     try {
-        const usuario = await db.collection("users").findOne({ email })
-        if (usuario) return res.status(409).send("E-mail já cadastrado")
+        const user = await db.collection("users").findOne({ email })
+        if (user) return res.status(409).send("E-mail já cadastrado")
 
         const hash = bcrypt.hashSync(password, 10);
 
@@ -22,15 +22,15 @@ export async function login(req, res) {
     const { email, password } = req.body;
 
     try {
-        const usuario = await db.collection("users").findOne({ email });
-        if (!usuario) return res.status(401).send("E-mail não cadastrado");
+        const user = await db.collection("users").findOne({ email });
+        if (!user) return res.status(401).send("E-mail não cadastrado");
 
-        const correctPassword = bcrypt.compareSync(password, usuario.password);
+        const correctPassword = bcrypt.compareSync(password, user.password);
         if (!correctPassword) return res.status(401).send("Senha incorreta");
 
         const token = uuid();
-        await db.collection("sessions").insertOne({token, userId: usuario._id});
-        res.send({token, userName: usuario.name});
+        await db.collection("sessions").insertOne({token, userId: user._id});
+        res.send({token, userName: user.name});
     } catch(err) {
         res.status(500).send(err.message);
     }
