@@ -20,6 +20,16 @@ export async function getGameById(req,res){
     }
 }
 
+export async function getGamesByUser(req, res){
+    const {userId} = res.locals.sessoes
+    try {
+        const games = await db.collection("games").find({vendedor: userId}).toArray()
+        res.send(games)
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
 export async function addGame(req,res){
     const {titulo, valor, descricao, capa, genero} = req.body
     const vendedor = res.locals.sessoes.userId
