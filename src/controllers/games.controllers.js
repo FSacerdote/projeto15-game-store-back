@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { db } from "../database/database.connection.js";
 
 export async function getGames(req, res){
@@ -10,9 +11,10 @@ export async function getGames(req, res){
 }
 
 export async function getGameById(req,res){
-    const { gameId }= req.body
+    const { gameId }= req.params
     try {
         const game = await db.collection("games").findOne({_id: gameId})
+        res.send(game)
     } catch (error) {
         res.status(500).send(error.message)
     }
@@ -25,6 +27,18 @@ export async function addGame(req,res){
     try {
         await db.collection("games").insertOne({titulo, valor, descricao, capa, genero, vendedor})
         res.send()
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
+export async function editGame(req,res){
+    const {id} = req.params
+    const {titulo, valor, descricao, capa, genero} = req.body
+
+    const gameEditado = {titulo, valor, descricao, capa, genero}
+    try {
+        await db.collection("games").updateOne({_id: new ObjectId(id)}, {$set: gameEditado})
     } catch (error) {
         res.status(500).send(error.message)
     }
