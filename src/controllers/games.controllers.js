@@ -13,7 +13,7 @@ export async function getGames(req, res){
 export async function getGameById(req,res){
     const { gameId }= req.params
     try {
-        const game = await db.collection("games").findOne({_id: gameId})
+        const game = await db.collection("games").findOne({_id: new ObjectId(gameId)})
         res.send(game)
     } catch (error) {
         res.status(500).send(error.message)
