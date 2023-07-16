@@ -10,7 +10,7 @@ gamesRouter.get("/games", getGames)
 gamesRouter.post("/games", schemaValidation(gameSchema), userValidation, addGame)
 gamesRouter.put("/editar/:id", schemaValidation(gameSchema), editGame)
 gamesRouter.get("/game/:gameId", getGameById)
-gamesRouter.get("/games/:id", userValidation, getGamesByUser)
+gamesRouter.get("/meusjogos", userValidation, getGamesByUser)
 gamesRouter.delete("/delete/:id", userValidation, deleteGame)
 
 export default gamesRouter
