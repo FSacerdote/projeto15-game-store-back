@@ -54,3 +54,12 @@ export async function editGame(req, res) {
         res.status(500).send(error.message)
     }
 }
+
+export async function deleteGame(req, res){
+    const {id} = req.params
+    try{
+        await db.collection("games").deleteOne({_id: new ObjectId(id)})
+    }catch (error){
+        res.status(500).send(error.message)
+    }
+}
