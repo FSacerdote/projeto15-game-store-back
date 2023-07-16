@@ -7,9 +7,9 @@ export async function userValidation(req, res, next){
     if(!token) return res.sendStatus(401);
 
     try {
-        const sessoes = await db.collection("sessoes").findOne({ token })
-        if (!sessoes) return res.sendStatus(401);
-        res.locals.sessoes = sessoes;
+        const sessions = await db.collection("sessions").findOne({ token })
+        if (!sessions) return res.sendStatus(401);
+        res.locals.sessions = sessions;
         next();
     } catch(err) {
         res.status(500).send(err.message);

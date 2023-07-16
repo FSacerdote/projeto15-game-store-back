@@ -1,6 +1,5 @@
 import { Router } from "express"
 import gamesRouter from "./games.routes.js"
-import authRouter from "./users.routes.js"
 import userRouter from "./users.routes.js"
 
 
