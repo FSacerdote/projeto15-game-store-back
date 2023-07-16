@@ -3,15 +3,17 @@ import { v4 as uuid } from "uuid";
 import { db } from "../database/database.connection.js";
 
 export async function signup(req, res) {
-    const { name, email, password } = req.body;
+    const { nome, email, senha } = req.body;
+    console.log(req.body);
     
     try {
-        const user = await db.collection("users").findOne({ email })
-        if (user) return res.status(409).send("E-mail já cadastrado")
+        const usuario = await db.collection("users").findOne({ email })
+        if (usuario) return res.status(409).send("E-mail já cadastrado")
 
-        const hash = bcrypt.hashSync(password, 10);
+        console.log(senha);
+        const hash = bcrypt.hashSync(senha, 10);
 
-        await db.collection("users").insertOne({ name, email, password: hash });
+        await db.collection("users").insertOne({ nome, email, senha: hash });
         res.sendStatus(201);
     } catch(err) {
         res.status(500).send(err.message);
@@ -19,18 +21,18 @@ export async function signup(req, res) {
 }
 
 export async function login(req, res) {
-    const { email, password } = req.body;
+    const { email, senha } = req.body;
 
     try {
-        const user = await db.collection("users").findOne({ email });
-        if (!user) return res.status(401).send("E-mail não cadastrado");
+        const usuario = await db.collection("users").findOne({ email });
+        if (!usuario) return res.status(401).send("E-mail não cadastrado");
 
-        const correctPassword = bcrypt.compareSync(password, user.password);
+        const correctPassword = bcrypt.compareSync(senha, usuario.senha);
         if (!correctPassword) return res.status(401).send("Senha incorreta");
 
         const token = uuid();
-        await db.collection("sessions").insertOne({token, userId: user._id});
-        res.send({token, userName: user.name});
+        await db.collection("sessions").insertOne({token, userId: usuario._id});
+        res.send({token, userName: usuario.nome});
     } catch(err) {
         res.status(500).send(err.message);
     }
