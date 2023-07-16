@@ -1,17 +1,16 @@
 import { db } from "../database/database.connection.js";
 
-export async function userValidation(req, res, next){
+export async function userValidation(req, res, next) {
     const { authorizaton } = req.headers;
     const token = authorizaton?.replace("Bearer ", "");
-
-    if(!token) return res.sendStatus(401);
+    if (!token) return res.sendStatus(401);
 
     try {
-        const sessoes = await db.collection("sessoes").findOne({ token })
+        const sessoes = await db.collection("sessions").findOne({ token })
         if (!sessoes) return res.sendStatus(401);
         res.locals.sessoes = sessoes;
         next();
-    } catch(err) {
+    } catch (err) {
         res.status(500).send(err.message);
     }
 }
