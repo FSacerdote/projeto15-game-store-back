@@ -3,6 +3,10 @@ export default (schema) => {
         const token = req.headers.authorization.replace("Bearer ", "");
         const data = req.body.userInfo;
         const items = req.body.selectedItems;
+        console.log(!items.length);
+        if (items.length === 0) {
+            return res.status(422).send("Adicione items ao seu carrinho para fazer um pedido.");
+        }
 
         const validation = schema(data);
         if (validation.error) {
